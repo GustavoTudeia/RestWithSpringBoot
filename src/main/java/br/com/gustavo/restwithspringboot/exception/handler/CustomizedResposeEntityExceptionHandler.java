@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.gustavo.restwithspringboot.exception.ExceptionResponse;
+import br.com.gustavo.restwithspringboot.exception.InvalidJwtAuthenticationException;
 import br.com.gustavo.restwithspringboot.exception.ResourceNotFoundException;
 
 @ControllerAdvice
@@ -26,6 +27,13 @@ public class CustomizedResposeEntityExceptionHandler extends ResponseEntityExcep
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception ex, WebRequest request){
+		ExceptionResponse exceptionresponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(exceptionresponse, HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@ExceptionHandler(InvalidJwtAuthenticationException.class)
+	public final ResponseEntity<ExceptionResponse> invalidJwtAuthenticationException(Exception ex, WebRequest request){
 		ExceptionResponse exceptionresponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(exceptionresponse, HttpStatus.BAD_REQUEST);
 		
